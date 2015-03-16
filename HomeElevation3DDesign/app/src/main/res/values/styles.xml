@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="FreeWallTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="FreeWallTheme" parent="@android:style/Theme.Holo">
         <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
         <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
     </style>

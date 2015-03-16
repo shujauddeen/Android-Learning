@@ -40,12 +40,9 @@
         </activity>
         <activity
             android:name=".KMFullScreenViewActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".KMSettingsActivity"
-            android:label="@string/action_settings"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName=".KMMainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".KMMainActivity" />
         </activity>
     </application>
 

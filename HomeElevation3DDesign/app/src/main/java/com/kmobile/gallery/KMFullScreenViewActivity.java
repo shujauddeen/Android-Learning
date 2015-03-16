@@ -14,6 +14,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
@@ -52,8 +54,8 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
     private static final int REQ_CODE_WP_IMAGE = 1;
     private KMWallpaper selectedPhoto;
 	private ImageView fullImageView;
-	private LinearLayout llSetWallpaper, llDownloadWallpaper, btnClose;
     private HorizontalScrollView llImgLayout;
+    private LinearLayout llSetWallpaper, llDownloadWallpaper;
 	private KMUtils utils;
 	private ProgressBar pbLoader;
     private KMActivitySwipeDetector swipe;
@@ -72,9 +74,8 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
 		setContentView(R.layout.activity_fullscreen_image);
 
 		fullImageView = (ImageView) findViewById(R.id.imgFullscreen);
-		llSetWallpaper = (LinearLayout) findViewById(R.id.llSetWallpaper);
-		llDownloadWallpaper = (LinearLayout) findViewById(R.id.llDownloadWallpaper);
-        btnClose = (LinearLayout) findViewById(R.id.btnClose);
+        llSetWallpaper = (LinearLayout) findViewById(R.id.llSetWallpaper);
+        llDownloadWallpaper = (LinearLayout) findViewById(R.id.llDownloadWallpaper);
         llImgLayout = (HorizontalScrollView) findViewById(R.id.imgLayout);
 		pbLoader = (ProgressBar) findViewById(R.id.pbLoader);
 //        btnClose = (Button) findViewById(R.id.btnClose);
@@ -82,19 +83,18 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
         llImgLayout.setOnTouchListener(swipe);
 
 		// hide the action bar in fullscreen mode
-		getActionBar().hide();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // layout click listeners
+        llSetWallpaper.setOnClickListener(this);
+        llDownloadWallpaper.setOnClickListener(this);
+
+        // setting layout buttons alpha/opacity
+        llSetWallpaper.getBackground().setAlpha(70);
+        llDownloadWallpaper.getBackground().setAlpha(70);
+
         photolist = KMPhotoUtils.getIntance().get();
 		utils = new KMUtils(getApplicationContext());
-
-		// layout click listeners
-		llSetWallpaper.setOnClickListener(this);
-		llDownloadWallpaper.setOnClickListener(this);
-        btnClose.setOnClickListener(this);
-
-		// setting layout buttons alpha/opacity
-		llSetWallpaper.getBackground().setAlpha(70);
-		llDownloadWallpaper.getBackground().setAlpha(70);
-        btnClose.getBackground().setAlpha(70);
 
 		Intent i = getIntent();
 		selectedPhoto = (KMWallpaper) i.getSerializableExtra(TAG_SEL_IMAGE);
@@ -122,11 +122,11 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
                 "Image full resolution url: "
                         + url);
 
+        llSetWallpaper.setVisibility(View.GONE);
+        llDownloadWallpaper.setVisibility(View.GONE);
+
 		// show loader before making request
 		pbLoader.setVisibility(View.VISIBLE);
-		llSetWallpaper.setVisibility(View.GONE);
-		llDownloadWallpaper.setVisibility(View.GONE);
-        btnClose.setVisibility(View.GONE);
 		// volley's json obj request
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET, url,
 				null, new Response.Listener<JSONObject>() {
@@ -192,11 +192,9 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
 												// hide loader and show set &
 												// download buttons
 												pbLoader.setVisibility(View.GONE);
-												llSetWallpaper
-														.setVisibility(View.VISIBLE);
-												llDownloadWallpaper
-														.setVisibility(View.VISIBLE);
-                                                btnClose
+                                                llSetWallpaper
+                                                        .setVisibility(View.VISIBLE);
+                                                llDownloadWallpaper
                                                         .setVisibility(View.VISIBLE);
 											}
 										}
@@ -272,33 +270,6 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
 		fullImageView.setLayoutParams(params);
 	}
 
-	/**
-	 * View click listener
-	 * */
-	@Override
-	public void onClick(View v) {
-		Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
-				.getBitmap();
-        String uri = null;
-		switch (v.getId()) {
-		// button Download Wallpaper tapped
-		case R.id.llDownloadWallpaper:
-			uri = utils.saveImageToSDCard(bitmap);
-			break;
-		// button Set As Wallpaper tapped
-		case R.id.llSetWallpaper:
-            uri = utils.saveImageToSDCard(bitmap);
-            performCrop(uri);
-			break;
-        //button set as close tapped
-        case R.id.btnClose:
-            KMFullScreenViewActivity.this.finish();
-            break;
-		default:
-			break;
-		}
-	}
-
     public void performCrop(String path){
         try{
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -311,6 +282,29 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
             String errorMessage = "Your device doesn't support the crop action!";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
+        }
+    }
+
+    /**
+     * View click listener
+     * */
+    @Override
+    public void onClick(View v) {
+        Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
+                .getBitmap();
+        String uri = null;
+        switch (v.getId()) {
+            // button Download Wallpaper tapped
+            case R.id.llDownloadWallpaper:
+                uri = utils.saveImageToSDCard(bitmap);
+                break;
+            // button Set As Wallpaper tapped
+            case R.id.llSetWallpaper:
+                uri = utils.saveImageToSDCard(bitmap);
+                performCrop(uri);
+                break;
+            default:
+                break;
         }
     }
 
@@ -388,5 +382,46 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    /**
+     * On menu item selected
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar actions click
+        Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
+                .getBitmap();
+        String uri = null;
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                uri = utils.saveImageToSDCard(bitmap);
+                shareImage(uri);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Method to share any image.
+    private void shareImage(String path) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        // setType("image/png"); OR for jpeg: setType("image/jpeg");
+        share.setType("image/*");
+        Uri uri = getUri(path);
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(share, "Share Image!"));
     }
 }

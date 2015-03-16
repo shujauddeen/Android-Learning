@@ -83,15 +83,12 @@ public class KMMainActivity extends Activity {
 				R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
-
-				// calling onPrepareOptionsMenu() to show action bar icons
-				invalidateOptionsMenu();
+                invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(mDrawerTitle);
-				// calling onPrepareOptionsMenu() to hide action bar icons
-				invalidateOptionsMenu();
+                invalidateOptionsMenu();
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -101,6 +98,15 @@ public class KMMainActivity extends Activity {
 			displayView(0);
 		}
 	}
+
+    /* *
+	 * Called when invalidateOptionsMenu() is triggered
+	 */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
 	/**
 	 * Navigation drawer menu item click listener
@@ -115,11 +121,6 @@ public class KMMainActivity extends Activity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
 	/**
 	 * On menu item selected
@@ -130,30 +131,9 @@ public class KMMainActivity extends Activity {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle action bar actions click
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			// Selected settings menu item
-			// launch Settings activity
-			Intent intent = new Intent(KMMainActivity.this,
-					KMSettingsActivity.class);
-			startActivity(intent);
-			return true;
-		default:
 			return super.onOptionsItemSelected(item);
-		}
 	}
 
-	/* *
-	 * Called when invalidateOptionsMenu() is triggered
-	 */
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// if nav drawer is opened, hide the action items
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-		return super.onPrepareOptionsMenu(menu);
-	}
 
 	/**
 	 * Diplaying fragment view for selected nav drawer list item
