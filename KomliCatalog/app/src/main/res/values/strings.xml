@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KomliCatalog</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_custom_list_apdapter">CustomListApdapter</string>
+    <string name="title_activity_detail_list_item">DetailListItem</string>
+    <string name="title_activity_add_to_cart">AddToCart</string>
+    <string name="app_id">1472369699690646</string>
+
+</resources>
