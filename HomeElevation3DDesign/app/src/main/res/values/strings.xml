@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Home Elevation 3D Design</string>
+    <string name="title_name">Building Elevation</string>
     <string name="action_download">Download</string>
     <string name="action_share">Share</string>
     <string name="action_wallpaper">Set Wallpaper</string>

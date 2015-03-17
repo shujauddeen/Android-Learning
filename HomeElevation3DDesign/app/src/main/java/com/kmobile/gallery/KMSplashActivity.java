@@ -3,6 +3,8 @@ package com.kmobile.gallery;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KMSplashActivity extends Activity {
+public class KMSplashActivity extends ActionBarActivity {
 	private static final String TAG = KMSplashActivity.class.getSimpleName();
 	private static final String TAG_FEED = "feed", TAG_ENTRY = "entry",
 			TAG_GPHOTO_ID = "gphoto$id", TAG_T = "$t",
@@ -31,8 +33,9 @@ public class KMSplashActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().hide();
+//		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 		setContentView(R.layout.activity_splash);
 
 		// Picasa request to get list of albums

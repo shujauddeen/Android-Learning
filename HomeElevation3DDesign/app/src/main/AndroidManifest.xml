@@ -18,7 +18,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label= "@string/app_name"
-        android:theme="@style/FreeWallTheme" >
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         <activity
             android:name=".KMSplashActivity"
             android:label="@string/app_name"

@@ -4,11 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +25,7 @@ import com.kmobile.gallery.model.KMCategory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KMMainActivity extends Activity {
+public class KMMainActivity extends ActionBarActivity {
 	private static final String TAG = KMMainActivity.class.getSimpleName();
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -36,7 +37,7 @@ public class KMMainActivity extends Activity {
 	private List<KMCategory> albumsList;
 	private ArrayList<KMNavDrawerItem> navDrawerItems;
 	private KMNavDrawerListAdapter adapter;
-
+    private ActionBar actionBar;
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,22 +73,24 @@ public class KMMainActivity extends Activity {
 		mDrawerList.setAdapter(adapter);
 
 		// Enabling action bar app icon and behaving it as toggle button
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setIcon(
+        actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(
 				new ColorDrawable(getResources().getColor(
 						android.R.color.transparent)));
 
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
+				R.string.app_name, R.string.app_name) {
 			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
+                actionBar.setTitle(mTitle);
                 invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
+                actionBar.setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
 			}
 		};
@@ -141,18 +144,19 @@ public class KMMainActivity extends Activity {
 	private void displayView(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
+        String albumTitle = albumsList.get(position).getTitle();
 		switch (position) {
 		case 0:
 			// Recently added item selected
 			// don't pass album id to home fragment
-			fragment = KMGridFragment.newInstance(null);
+			fragment = KMGridFragment.newInstance(null,albumTitle);
 			break;
 
 		default:
 			// selected wallpaper category
 			// send album id to home fragment to list all the wallpapers
 			String albumId = albumsList.get(position).getId();
-			fragment = KMGridFragment.newInstance(albumId);
+			fragment = KMGridFragment.newInstance(albumId,albumTitle);
 			break;
 		}
 
@@ -174,8 +178,8 @@ public class KMMainActivity extends Activity {
 
 	@Override
 	public void setTitle(CharSequence title) {
-		mTitle = title;
-		getActionBar().setTitle(mTitle);
+		mTitle = title + " Designs";
+        actionBar.setTitle(mTitle);
 	}
 
 	/**

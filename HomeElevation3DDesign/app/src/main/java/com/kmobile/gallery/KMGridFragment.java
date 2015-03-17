@@ -41,6 +41,7 @@ public class KMGridFragment extends Fragment {
 	private GridView gridView;
 	private int columnWidth;
 	private static final String bundleAlbumId = "albumId";
+    private static final String bundleAlbumTitle = "albumTitle";
 	private String selectedAlbumId;
 	private List<KMWallpaper> photosList;
 	private ProgressBar pbLoader;
@@ -56,10 +57,11 @@ public class KMGridFragment extends Fragment {
 	public KMGridFragment() {
 	}
 
-	public static KMGridFragment newInstance(String albumId) {
+	public static KMGridFragment newInstance(String albumId, String albumTitle) {
 		KMGridFragment f = new KMGridFragment();
 		Bundle args = new Bundle();
 		args.putString(bundleAlbumId, albumId);
+        args.putString(bundleAlbumTitle,albumTitle);
 		f.setArguments(args);
 		return f;
 	}
@@ -229,6 +231,9 @@ public class KMGridFragment extends Fragment {
 
 				i.putExtra(KMFullScreenViewActivity.TAG_SEL_IMAGE, photo);
                 i.putExtra("pos",position);
+                if (getArguments().getString(bundleAlbumTitle) != null) {
+                    i.putExtra("title",getArguments().getString(bundleAlbumTitle));
+                }
 				startActivity(i);
 			}
 		});

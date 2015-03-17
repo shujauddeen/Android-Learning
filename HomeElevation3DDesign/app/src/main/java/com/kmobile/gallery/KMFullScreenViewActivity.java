@@ -1,6 +1,7 @@
 package com.kmobile.gallery;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -47,7 +49,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class KMFullScreenViewActivity extends Activity implements OnClickListener, KMSwipeInterface {
+public class KMFullScreenViewActivity extends ActionBarActivity implements OnClickListener, KMSwipeInterface {
 	private static final String TAG = KMFullScreenViewActivity.class
 			.getSimpleName();
 	public static final String TAG_SEL_IMAGE = "selectedImage";
@@ -82,8 +84,7 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
         swipe = new KMActivitySwipeDetector(this,KMFullScreenViewActivity.this);
         llImgLayout.setOnTouchListener(swipe);
 
-		// hide the action bar in fullscreen mode
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         // layout click listeners
         llSetWallpaper.setOnClickListener(this);
@@ -98,6 +99,11 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
 
 		Intent i = getIntent();
 		selectedPhoto = (KMWallpaper) i.getSerializableExtra(TAG_SEL_IMAGE);
+        String title = i.getStringExtra("title");
+        // hide the action bar in fullscreen mode
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(title + " Design");
 
         // check for selected photo null
 		if (selectedPhoto != null) {
@@ -409,6 +415,9 @@ public class KMFullScreenViewActivity extends Activity implements OnClickListene
             case R.id.action_share:
                 uri = utils.saveImageToSDCard(bitmap);
                 shareImage(uri);
+                return true;
+            case android.R.id.home:
+                KMFullScreenViewActivity.this.finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
