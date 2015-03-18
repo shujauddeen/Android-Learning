@@ -253,25 +253,26 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 		if (bWidth == 0 || bHeight == 0)
 			return;
 
-		int sHeight = 0;
+        int sWidth = 0;
 
 		if (android.os.Build.VERSION.SDK_INT >= 13) {
 			Display display = getWindowManager().getDefaultDisplay();
 			Point size = new Point();
 			display.getSize(size);
-			sHeight = size.y;
+            sWidth = size.x;
 		} else {
 			Display display = getWindowManager().getDefaultDisplay();
-			sHeight = display.getHeight();
+            sWidth = display.getWidth();
 		}
 
-		int new_width = (int) Math.floor((double) bWidth * (double) sHeight
-                / (double) bHeight);
-		params.width = new_width;
-		params.height = sHeight;
+        int new_height = (int) Math.floor((double) bHeight * (double) sWidth
+                / (double) bWidth);
 
-		Log.d(TAG, "Fullscreen image new dimensions: w = " + new_width
-                + ", h = " + sHeight);
+		params.width = sWidth;
+		params.height = new_height;
+
+		Log.d(TAG, "Fullscreen image new dimensions: w = " + sWidth
+                + ", h = " + new_height);
 
 		fullImageView.setLayoutParams(params);
 	}
@@ -302,11 +303,11 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
         switch (v.getId()) {
             // button Download Wallpaper tapped
             case R.id.llDownloadWallpaper:
-                uri = utils.saveImageToSDCard(bitmap);
+                uri = utils.saveImageToSDCard(bitmap,true);
                 break;
             // button Set As Wallpaper tapped
             case R.id.llSetWallpaper:
-                uri = utils.saveImageToSDCard(bitmap);
+                uri = utils.saveImageToSDCard(bitmap,true);
                 performCrop(uri);
                 break;
             default:
@@ -362,6 +363,8 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         i.putExtra(KMFullScreenViewActivity.TAG_SEL_IMAGE, photo);
                         i.putExtra("pos",pos);
                         startActivity(i);
+                        overridePendingTransition(R.anim.left_in,R.anim.right_out);
+
                         finish();
                     }
                 }
@@ -383,6 +386,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         i.putExtra(KMFullScreenViewActivity.TAG_SEL_IMAGE, photo);
                         i.putExtra("pos",pos);
                         startActivity(i);
+                        overridePendingTransition(R.anim.right_in,R.anim.left_out);
                         finish();
                     }
                 }
@@ -413,7 +417,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
         String uri = null;
         switch (item.getItemId()) {
             case R.id.action_share:
-                uri = utils.saveImageToSDCard(bitmap);
+                uri = utils.saveImageToSDCard(bitmap,false);
                 shareImage(uri);
                 return true;
             case android.R.id.home:

@@ -48,7 +48,7 @@ public class KMUtils {
 		return columnWidth;
 	}
 
-	public String saveImageToSDCard(Bitmap bitmap) {
+	public String saveImageToSDCard(Bitmap bitmap,boolean showToast) {
 		File myDir = new File(
 				Environment
 						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -67,11 +67,14 @@ public class KMUtils {
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			out.flush();
 			out.close();
-			Toast.makeText(
-                    _context,
-                    _context.getString(R.string.toast_saved).replace("#",
-                            "\"" + pref.getGalleryName() + "\""),
-                    Toast.LENGTH_SHORT).show();
+			if(showToast){
+                Toast.makeText(
+                        _context,
+                        _context.getString(R.string.toast_saved).replace("#",
+                                "\"" + pref.getGalleryName() + "\""),
+                        Toast.LENGTH_SHORT).show();
+            }
+
 			Log.d(TAG, "Wallpaper saved to: " + file.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
