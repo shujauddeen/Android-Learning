@@ -40,13 +40,7 @@
         android:id="@+id/llSetWallpaper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="150dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/btn_rounded_corner"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:background="@drawable/btn_rounded_corner" >
 
         <ImageView
             android:layout_width="25dp"

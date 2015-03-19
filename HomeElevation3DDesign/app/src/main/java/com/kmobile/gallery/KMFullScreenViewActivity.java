@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -249,10 +250,13 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 	private void adjustImageAspect(int bWidth, int bHeight) {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams sParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams dParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		if (bWidth == 0 || bHeight == 0)
 			return;
-
         int sWidth = 0;
 
 		if (android.os.Build.VERSION.SDK_INT >= 13) {
@@ -271,10 +275,18 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 		params.width = sWidth;
 		params.height = new_height;
 
+        sParams.topMargin = new_height + 100;
+        sParams.leftMargin = 20;
+        dParams.topMargin = new_height + 100;
+        dParams.leftMargin = sWidth-165;
+
+        llSetWallpaper.setLayoutParams(sParams);
+        llDownloadWallpaper.setLayoutParams(dParams);
 		Log.d(TAG, "Fullscreen image new dimensions: w = " + sWidth
                 + ", h = " + new_height);
 
 		fullImageView.setLayoutParams(params);
+
 	}
 
     public void performCrop(String path){
@@ -297,21 +309,24 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
      * */
     @Override
     public void onClick(View v) {
-        Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
-                .getBitmap();
-        String uri = null;
-        switch (v.getId()) {
-            // button Download Wallpaper tapped
-            case R.id.llDownloadWallpaper:
-                uri = utils.saveImageToSDCard(bitmap,true);
-                break;
-            // button Set As Wallpaper tapped
-            case R.id.llSetWallpaper:
-                uri = utils.saveImageToSDCard(bitmap,true);
-                performCrop(uri);
-                break;
-            default:
-                break;
+        if(fullImageView != null && fullImageView.getDrawable() != null)
+        {
+            Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
+                    .getBitmap();
+            String uri = null;
+            switch (v.getId()) {
+                // button Download Wallpaper tapped
+                case R.id.llDownloadWallpaper:
+                    uri = utils.saveImageToSDCard(bitmap,true);
+                    break;
+                // button Set As Wallpaper tapped
+                case R.id.llSetWallpaper:
+                    uri = utils.saveImageToSDCard(bitmap,true);
+                    performCrop(uri);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -412,6 +427,8 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar actions click
+        if(fullImageView == null || fullImageView.getDrawable() == null)
+            return true;
         Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
                 .getBitmap();
         String uri = null;
