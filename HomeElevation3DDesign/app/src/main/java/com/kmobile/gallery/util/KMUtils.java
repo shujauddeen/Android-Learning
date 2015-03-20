@@ -70,12 +70,9 @@ public class KMUtils {
 			if(showToast){
                 Toast.makeText(
                         _context,
-                        _context.getString(R.string.toast_saved).replace("#",
-                                "\"" + pref.getGalleryName() + "\""),
+                        _context.getString(R.string.toast_saved),
                         Toast.LENGTH_SHORT).show();
             }
-
-			Log.d(TAG, "Wallpaper saved to: " + file.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Toast.makeText(_context,

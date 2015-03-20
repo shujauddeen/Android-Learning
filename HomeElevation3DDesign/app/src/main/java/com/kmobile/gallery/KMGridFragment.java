@@ -77,11 +77,7 @@ public class KMGridFragment extends Fragment {
 		// if Album Id is null, user is selected recently added option
 		if (getArguments().getString(bundleAlbumId) != null) {
 			selectedAlbumId = getArguments().getString(bundleAlbumId);
-			Log.d(TAG,
-                    "Selected album id: "
-                            + getArguments().getString(bundleAlbumId));
 		} else {
-			Log.d(TAG, "Selected recentlyed added album");
 			selectedAlbumId = null;
 		}
 
@@ -97,8 +93,6 @@ public class KMGridFragment extends Fragment {
 					pref.getGoogleUserName()).replace("_ALBUM_ID_",
 					selectedAlbumId);
 		}
-
-		Log.d(TAG, "Final request url: " + url);
 
 		View rootView = inflater.inflate(R.layout.fragment_grid, container,
 				false);
@@ -121,14 +115,10 @@ public class KMGridFragment extends Fragment {
 
 					@Override
 					public void onResponse(JSONObject response) {
-						Log.d(TAG,
-                                "List of photos json reponse: "
-                                        + response.toString());
 						try {
 							// Parsing the json response
 							JSONArray entry = response.getJSONObject(TAG_FEED)
 									.getJSONArray(TAG_ENTRY);
-                            Log.d(TAG, "Entry : " + entry.toString());
 							// looping through each photo and adding it to list
 							// data set
 							for (int i = 0; i < entry.length(); i++) {
@@ -146,9 +136,7 @@ public class KMGridFragment extends Fragment {
 
 									String photoJson = photoObj.getJSONObject(
 											TAG_ID).getString(TAG_T)
-											+ "&imgmax=d";									
-
-                                    Log.d(TAG, "photojson : " + photoJson);
+											+ "&imgmax=d";
 									int width = mediaObj.getInt(TAG_IMG_WIDTH);
 									int height = mediaObj
 											.getInt(TAG_IMG_HEIGHT);
@@ -158,9 +146,6 @@ public class KMGridFragment extends Fragment {
 
 									// Adding the photo to list data set
 									photosList.add(p);
-
-									Log.d(TAG, "Photo: " + url + ", w: "
-                                            + width + ", h: " + height);
 								}
 							}
 

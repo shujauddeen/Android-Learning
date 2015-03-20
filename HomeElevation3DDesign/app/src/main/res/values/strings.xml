@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Home Elevation 3D Design</string>
+    <string name="app_name">Home Elevation 3D Designs</string>
     <string name="title_name">Building Elevation</string>
     <string name="action_download">Download</string>
     <string name="action_share">Share</string>
     <string name="action_wallpaper">Set Wallpaper</string>
     <string name="nav_drawer_recently_added">Recently Added</string>
-    <string name="toast_saved">Wallpapaer saved to #</string>
+    <string name="toast_saved">Wallpapaer saved</string>
     <string name="toast_saved_failed">Sorry! Failed to save wallpaper</string>
     <string name="toast_wallpaper_set">Wallpapaer updated!</string>
     <string name="toast_wallpaper_set_failed">Sorry! Unable to set wallpapaer</string>

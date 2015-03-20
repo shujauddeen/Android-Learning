@@ -31,7 +31,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="kmobile" android:host="home_elevation_3d_design" />
+                <data android:scheme="home_elevation_3d_designs" android:host="home" />
             </intent-filter>
         </activity>
         <activity

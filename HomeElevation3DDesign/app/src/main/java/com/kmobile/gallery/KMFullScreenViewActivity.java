@@ -124,11 +124,6 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 	 * */
 	private void fetchFullResolutionImage() {
 		String url = selectedPhoto.getPhotoJson();
-
-        Log.d(TAG,
-                "Image full resolution url: "
-                        + url);
-
         llSetWallpaper.setVisibility(View.GONE);
         llDownloadWallpaper.setVisibility(View.GONE);
 
@@ -140,9 +135,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 
 					@Override
 					public void onResponse(JSONObject response) {
-						Log.d(TAG,
-                                "Image full resolution json: "
-                                        + response.toString());
+
 						try {
 							// Parsing the json response
 							JSONObject entry = response
@@ -161,17 +154,8 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 							final int width = mediaObj.getInt(TAG_IMG_WIDTH);
 							final int height = mediaObj.getInt(TAG_IMG_HEIGHT);
 
-							Log.d(TAG, "Full resolution image. url: "
-                                    + fullResolutionUrl + ", w: " + width
-                                    + ", h: " + height);
-
 							ImageLoader imageLoader = KMAppController
 									.getInstance().getImageLoader();
-
-							// We download image into ImageView instead of
-							// NetworkImageView to have callback methods
-							// Currently NetworkImageView doesn't have callback
-							// methods
 
 							imageLoader.get(fullResolutionUrl,
 									new ImageListener() {
@@ -271,19 +255,16 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 
         int new_height = (int) Math.floor((double) bHeight * (double) sWidth
                 / (double) bWidth);
-
+        int rMargin = (sWidth/100)*17;
 		params.width = sWidth;
 		params.height = new_height;
 
         sParams.topMargin = new_height + 100;
         sParams.leftMargin = 20;
         dParams.topMargin = new_height + 100;
-        dParams.leftMargin = sWidth-165;
-
+        dParams.leftMargin = sWidth-rMargin;
         llSetWallpaper.setLayoutParams(sParams);
         llDownloadWallpaper.setLayoutParams(dParams);
-		Log.d(TAG, "Fullscreen image new dimensions: w = " + sWidth
-                + ", h = " + new_height);
 
 		fullImageView.setLayoutParams(params);
 
@@ -377,10 +358,9 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         KMWallpaper photo = photolist.get(pos);
                         i.putExtra(KMFullScreenViewActivity.TAG_SEL_IMAGE, photo);
                         i.putExtra("pos",pos);
-                        startActivity(i);
-                        overridePendingTransition(R.anim.left_in,R.anim.right_out);
-
                         finish();
+                        overridePendingTransition(R.anim.left_in,R.anim.right_out);
+                        startActivity(i);
                     }
                 }
                 break;
@@ -400,9 +380,9 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         KMWallpaper photo = photolist.get(pos);
                         i.putExtra(KMFullScreenViewActivity.TAG_SEL_IMAGE, photo);
                         i.putExtra("pos",pos);
-                        startActivity(i);
-                        overridePendingTransition(R.anim.right_in,R.anim.left_out);
                         finish();
+                        overridePendingTransition(R.anim.right_in,R.anim.left_out);
+                        startActivity(i);
                     }
                 }
                 break;
@@ -427,18 +407,18 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar actions click
-        if(fullImageView == null || fullImageView.getDrawable() == null)
-            return true;
-        Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
-                .getBitmap();
-        String uri = null;
         switch (item.getItemId()) {
             case R.id.action_share:
-                uri = utils.saveImageToSDCard(bitmap,false);
-                shareImage(uri);
+                if(fullImageView != null && fullImageView.getDrawable() != null){
+                    String uri = null;
+                    Bitmap bitmap = ((BitmapDrawable) fullImageView.getDrawable())
+                            .getBitmap();
+                    uri = utils.saveImageToSDCard(bitmap,false);
+                    shareImage(uri);
+                }
                 return true;
             case android.R.id.home:
-                KMFullScreenViewActivity.this.finish();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

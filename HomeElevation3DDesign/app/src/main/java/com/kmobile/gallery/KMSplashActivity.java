@@ -42,16 +42,12 @@ public class KMSplashActivity extends ActionBarActivity {
 		String url = KMAppConst.URL_PICASA_ALBUMS
 				.replace("_PICASA_USER_", KMAppController.getInstance()
 						.getPrefManger().getGoogleUserName());
-		
-		Log.d(TAG, "Albums request url: " + url);
-
 		// Preparing volley's json object request
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET, url,
 				null, new Response.Listener<JSONObject>() {
 
 					@Override
 					public void onResponse(JSONObject response) {
-						Log.d(TAG, "Albums Response: " + response.toString());
 						List<KMCategory> albums = new ArrayList<KMCategory>();
 						try {
 							// Parsing the json response
@@ -76,9 +72,6 @@ public class KMSplashActivity extends ActionBarActivity {
 
 								// add album to list
 								albums.add(album);
-
-								Log.d(TAG, "Album Id: " + albumId
-                                        + ", Album Title: " + albumTitle);
 							}
 
 							// Store albums in shared pref
