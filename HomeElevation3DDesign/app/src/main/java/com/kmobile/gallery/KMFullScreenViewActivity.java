@@ -348,8 +348,8 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
     public void onLeftToRight(View v) {
         switch (v.getId()){
             case R.id.imgLayout:
-                float maxScrollX = llImgLayout.getChildAt(0).getMeasuredWidth() - llImgLayout.getMeasuredWidth();
-                if(llImgLayout.getScrollX() == 0){
+//                float maxScrollX = llImgLayout.getChildAt(0).getMeasuredWidth() - llImgLayout.getMeasuredWidth();
+//                if(llImgLayout.getScrollX() == 0){
                     // On selecting the grid image, we launch fullscreen activity
                     Intent i = getIntent();
                     int pos = i.getIntExtra("pos",0);
@@ -362,7 +362,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         overridePendingTransition(R.anim.left_in,R.anim.right_out);
                         startActivity(i);
                     }
-                }
+//                }
                 break;
         }
     }
@@ -371,8 +371,8 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
     public void onRightToLeft(View v) {
         switch (v.getId()){
             case R.id.imgLayout:
-                float maxScrollX = llImgLayout.getChildAt(0).getMeasuredWidth() - llImgLayout.getMeasuredWidth();
-                if(llImgLayout.getScrollX() == maxScrollX){
+//                float maxScrollX = llImgLayout.getChildAt(0).getMeasuredWidth() - llImgLayout.getMeasuredWidth();
+//                if(llImgLayout.getScrollX() == maxScrollX){
                     Intent i = getIntent();
                     int pos = i.getIntExtra("pos",0);
                     pos++;
@@ -384,7 +384,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                         overridePendingTransition(R.anim.right_in,R.anim.left_out);
                         startActivity(i);
                     }
-                }
+//                }
                 break;
         }
     }
