@@ -11,7 +11,7 @@ public class KMAppConst {
 	public static final int GRID_PADDING = 4; // in dp
 
 	// Gallery directory name to save wallpapers
-	public static final String SDCARD_DIR_NAME = "KMElevation";
+	public static final String SDCARD_DIR_NAME = "HomeElevation3dDesigns";
 
 	// Picasa/Google web album username
 	public static final String PICASA_USER = "kmmobile83";
