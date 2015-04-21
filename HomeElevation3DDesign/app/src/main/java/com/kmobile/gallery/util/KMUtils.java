@@ -1,11 +1,12 @@
 package com.kmobile.gallery.util;
 
 import android.app.WallpaperManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Environment;
-import android.util.Log;
+import android.provider.MediaStore;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -67,6 +68,7 @@ public class KMUtils {
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			out.flush();
 			out.close();
+            addImageToGallery(file.getAbsolutePath(),_context);
 			if(showToast){
                 Toast.makeText(
                         _context,
@@ -96,4 +98,15 @@ public class KMUtils {
                     Toast.LENGTH_SHORT).show();
 		}
 	}
+
+    public static void addImageToGallery(final String filePath, final Context context) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.MediaColumns.DATA, filePath);
+
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
 }

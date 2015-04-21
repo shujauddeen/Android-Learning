@@ -1,16 +1,15 @@
 package com.kmobile.gallery;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,7 +80,6 @@ public class KMMainActivity extends ActionBarActivity {
 				new ColorDrawable(getResources().getColor(
 						android.R.color.transparent)));
 
-
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.string.app_name, R.string.app_name) {
 			public void onDrawerClosed(View view) {
@@ -100,6 +98,7 @@ public class KMMainActivity extends ActionBarActivity {
 			// on first time display view for first nav item
 			displayView(0);
 		}
+
 	}
 
     /* *
@@ -200,4 +199,6 @@ public class KMMainActivity extends ActionBarActivity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+
+
 }

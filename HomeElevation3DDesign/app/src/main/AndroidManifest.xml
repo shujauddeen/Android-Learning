@@ -17,7 +17,7 @@
         android:name=".app.KMAppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label= "@string/app_name"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".KMSplashActivity"
@@ -25,13 +25,18 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/filter_title_homeElevation">
+            <intent-filter android:label="@string/filter_title_homeElevation" >
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="home_elevation_3d_designs" android:host="home" />
+
+                <data
+                    android:host="home"
+                    android:scheme="home_elevation_3d_designs" />
             </intent-filter>
         </activity>
         <activity
@@ -40,9 +45,19 @@
         </activity>
         <activity
             android:name=".KMFullScreenViewActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".KMMainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".KMMainActivity" />
+            android:parentActivityName=".KMMainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".KMMainActivity" />
+        </activity>
+        <activity
+            android:name=".util.KMEditImage"
+            android:parentActivityName=".KMFullScreenViewActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".KMFullScreenViewActivity" />
         </activity>
     </application>
 

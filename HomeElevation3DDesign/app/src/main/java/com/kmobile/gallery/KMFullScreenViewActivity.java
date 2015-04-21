@@ -1,8 +1,6 @@
 package com.kmobile.gallery;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +38,7 @@ import com.kmobile.gallery.helper.KMActivitySwipeDetector;
 import com.kmobile.gallery.helper.KMPhotoUtils;
 import com.kmobile.gallery.helper.KMSwipeInterface;
 import com.kmobile.gallery.model.KMWallpaper;
+import com.kmobile.gallery.util.KMEditImage;
 import com.kmobile.gallery.util.KMUtils;
 
 import org.json.JSONArray;
@@ -58,17 +57,18 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
     private KMWallpaper selectedPhoto;
 	private ImageView fullImageView;
     private HorizontalScrollView llImgLayout;
-    private LinearLayout llSetWallpaper, llDownloadWallpaper;
+    private LinearLayout llSetWallpaper, llDownloadWallpaper, llEditWallpaper;
 	private KMUtils utils;
 	private ProgressBar pbLoader;
     private KMActivitySwipeDetector swipe;
     private List<KMWallpaper> photolist;
     private static final String TEMP_PHOTO_FILE = "temporary_holder.jpg";
+    private String photo_id = null;
 	// Picasa JSON response node keys
 	private static final String TAG_ENTRY = "entry",
 			TAG_MEDIA_GROUP = "media$group",
 			TAG_MEDIA_CONTENT = "media$content", TAG_IMG_URL = "url",
-			TAG_IMG_WIDTH = "width", TAG_IMG_HEIGHT = "height";
+			TAG_IMG_WIDTH = "width", TAG_IMG_HEIGHT = "height",TAG_PHOTO_ID = "gphoto$id",TAG_DATA = "$t";
 
 
 	@Override
@@ -79,6 +79,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 		fullImageView = (ImageView) findViewById(R.id.imgFullscreen);
         llSetWallpaper = (LinearLayout) findViewById(R.id.llSetWallpaper);
         llDownloadWallpaper = (LinearLayout) findViewById(R.id.llDownloadWallpaper);
+        llEditWallpaper = (LinearLayout) findViewById(R.id.llEditWallpaper);
         llImgLayout = (HorizontalScrollView) findViewById(R.id.imgLayout);
 		pbLoader = (ProgressBar) findViewById(R.id.pbLoader);
 //        btnClose = (Button) findViewById(R.id.btnClose);
@@ -90,10 +91,12 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
         // layout click listeners
         llSetWallpaper.setOnClickListener(this);
         llDownloadWallpaper.setOnClickListener(this);
+        llEditWallpaper.setOnClickListener(this);
 
         // setting layout buttons alpha/opacity
         llSetWallpaper.getBackground().setAlpha(70);
         llDownloadWallpaper.getBackground().setAlpha(70);
+        llEditWallpaper.getBackground().setAlpha(70);
 
         photolist = KMPhotoUtils.getIntance().get();
 		utils = new KMUtils(getApplicationContext());
@@ -126,6 +129,7 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 		String url = selectedPhoto.getPhotoJson();
         llSetWallpaper.setVisibility(View.GONE);
         llDownloadWallpaper.setVisibility(View.GONE);
+        llEditWallpaper.setVisibility(View.GONE);
 
 		// show loader before making request
 		pbLoader.setVisibility(View.VISIBLE);
@@ -144,7 +148,9 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 							JSONArray mediacontentArry = entry.getJSONObject(
 									TAG_MEDIA_GROUP).getJSONArray(
 									TAG_MEDIA_CONTENT);
-
+                            JSONObject photoObj = entry.getJSONObject(TAG_PHOTO_ID);
+                            photo_id = photoObj.getString(TAG_DATA);
+                            Log.d(TAG,"Photo Id : " + photo_id);
 							JSONObject mediaObj = (JSONObject) mediacontentArry
 									.get(0);
 
@@ -158,39 +164,40 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
 									.getInstance().getImageLoader();
 
 							imageLoader.get(fullResolutionUrl,
-									new ImageListener() {
+                                    new ImageListener() {
 
-										@Override
-										public void onErrorResponse(
-												VolleyError arg0) {
-											Toast.makeText(
+                                        @Override
+                                        public void onErrorResponse(
+                                                VolleyError arg0) {
+                                            Toast.makeText(
                                                     getApplicationContext(),
                                                     getString(R.string.msg_wall_fetch_error),
                                                     Toast.LENGTH_LONG).show();
-										}
+                                        }
 
-										@Override
-										public void onResponse(
-												ImageContainer response,
-												boolean arg1) {
-											if (response.getBitmap() != null) {
-												// load bitmap into imageview
-												fullImageView
-														.setImageBitmap(response
-																.getBitmap());
-												adjustImageAspect(width, height);
+                                        @Override
+                                        public void onResponse(
+                                                ImageContainer response,
+                                                boolean arg1) {
+                                            if (response.getBitmap() != null) {
+                                                // load bitmap into imageview
+                                                fullImageView
+                                                        .setImageBitmap(response
+                                                                .getBitmap());
+                                                adjustImageAspect(width, height);
 
-												// hide loader and show set &
-												// download buttons
-												pbLoader.setVisibility(View.GONE);
+                                                // hide loader and show set &
+                                                // download buttons
+                                                pbLoader.setVisibility(View.GONE);
                                                 llSetWallpaper
                                                         .setVisibility(View.VISIBLE);
                                                 llDownloadWallpaper
                                                         .setVisibility(View.VISIBLE);
-											}
-										}
-									});
-
+                                                llEditWallpaper
+                                                        .setVisibility(View.VISIBLE);
+                                            }
+                                        }
+                                    });
 						} catch (JSONException e) {
 							e.printStackTrace();
 							Toast.makeText(getApplicationContext(),
@@ -304,6 +311,13 @@ public class KMFullScreenViewActivity extends ActionBarActivity implements OnCli
                 case R.id.llSetWallpaper:
                     uri = utils.saveImageToSDCard(bitmap,true);
                     performCrop(uri);
+                    break;
+                case R.id.llEditWallpaper:
+                    Intent i = new Intent(this,
+                            KMEditImage.class);
+                    i.putExtra(TAG_SEL_IMAGE, selectedPhoto);
+                    i.putExtra("photo_id",photo_id);
+                    startActivity(i);
                     break;
                 default:
                     break;

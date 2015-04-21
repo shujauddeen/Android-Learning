@@ -22,7 +22,11 @@
     <string name="lbl_gallery_name">Gallery directory name</string>
     <string name="lbl_btn_save">Save</string>
     <string name="filter_title_homeElevation">deeplinkFilter</string>
-    <string name="set_wallpaper">Set</string>
+    <string name="edit_wallpaper">Edit</string>
     <string name="download_wallpaper">Download</string>
+    <string name="title_activity_kmedit_image">KMEditImage</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
